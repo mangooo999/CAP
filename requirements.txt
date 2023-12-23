@@ -1,6 +1,6 @@
 fastapi
 uvicorn
-scikit-learn
+scikit-learn==1.2.0
 pydantic
 Pillow
 pickleshare

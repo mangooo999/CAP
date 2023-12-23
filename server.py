@@ -1,4 +1,4 @@
-import pickle
+import pickle5 as pickle
 from fastapi import FastAPI
 
 

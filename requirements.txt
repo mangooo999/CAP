@@ -1,6 +1,5 @@
 fastapi
 uvicorn
-sklearn
 scikit-learn
 pydantic
 Pillow

@@ -11,8 +11,8 @@ model_path = "model_pkl.pkl"
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 
-@app.get("/predict")
-def read_item(tmp, dust):
+@app.post("/predict")
+def predict(tmp, dust):
     # Use your model to make predictions
     result = model.predict([(tmp, dust)])
     return {"result": result}

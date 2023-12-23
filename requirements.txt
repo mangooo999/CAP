@@ -1,0 +1,4 @@
+pickle
+fastapi
+uvicorn
+scikit-learn

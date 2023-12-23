@@ -1,21 +1,14 @@
 import pickle
 from fastapi import FastAPI
-from pydantic import BaseModel
 
-
-class CAP(BaseModel):
-    tmp : int
-    dust : int
 
 app = FastAPI()
 
 model=pickle.load(open("model_pkl.pkl","rb"))
 
 
-@app.post("/predict")
-def predict(req : CAP):
-    tmp = CAP.tmp
-    dust = CAP.dust
+@app.get("/predict")
+def predict(tmp : int , dust : int):
     feat  = (tmp, dust)
     res = model.predict([feat])
     return {res}

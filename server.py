@@ -7,7 +7,7 @@ from fastapi import FastAPI
 app = FastAPI()
 
 
-model_path = "final.pkl"
+model_path = "model_pkl.pkl"
 with open(model_path, 'rb') as file:
     model = pickle.load(file)
 

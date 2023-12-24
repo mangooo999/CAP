@@ -13,11 +13,10 @@ with open(model_path, 'rb') as file:
 
 
 @app.get("/predict")
-def read_item():
+def read_item(tmp : int , dust : int):
     # Use your model to make predictions
-    result = list(model.predict([[5, 6]]))
-    return {"result": result[0].item()}
-
+    result = list(model.predict([[tmp, dust]]))
+    return {result[0].item()}
 
 
 

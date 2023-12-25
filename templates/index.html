@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FastAPI Prediction Viewer</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 45px;
+            background-color: #fbfccb; /* Set background color to green */
+            color: white; /* Set text color to white */
+        }
+
+        .topp {
+            color: #00000059;
+            margin-bottom: 20px;
+        }
+
+        .Readings {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 20px 100px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            box-shadow: 0px 0px 6px 1px gray;
+            max-width: 100%; /* Set max-width to 100% */
+            color: black; /* Set text color to black */
+        }
+
+        .box div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            flex-grow: 1; /* Allow content to expand within the box */
+        }
+
+        .message {
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 30px;
+            overflow: hidden; /* Hide overflow text */
+        }
+
+        .message.red {
+            background-color: rgb(255, 141, 141);
+        }
+
+        .message.yellow {
+            background-color: #fbfccb;
+        }
+        .message.green {
+            background-color: #b3fcb8;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="topp">
+        <h1>Current State</h1>
+    </div>
+    
+    <div class="Readings" id="readingsContainer">
+        <!-- Fixed reading boxes for Temperature, Dust, and Result -->
+        <div class="box" id="temperatureBox">
+            <div><i class="fas fa-thermometer-half"></i></div>
+            <div id="temperatureValue"></div>
+            <div class="message yellow">°C</div>
+        </div>
+        <div class="box" id="dustBox">
+            <div><i class="fas fa-cloud"></i></div>
+            <div id="dustValue"></div>
+            <div class="message yellow">ug/m^3</div>
+        </div>
+        <div class="box" id="resultBox">
+            <div><i class="fas fa-check-circle"></i></div>
+            <div id="resultValue"></div>
+            <div id="resultMessage" class="message"></div>
+        </div>
+    </div>
+    <script>
+        // Function to update the content of fixed reading boxes
+        function updateReadingBoxes(data) {
+            // Update temperature box
+            document.getElementById('temperatureValue').textContent = `Temperature: ${data.tmp}`;
+    
+            // Update dust box
+            document.getElementById('dustValue').textContent = `Dust: ${data.dust}`;
+    
+            // Determine the message class and background color based on prediction value
+            const isPredictionZero = data.prediction === 0;
+            const messageClass = isPredictionZero ? 'green' : 'red';
+            const backgroundColor = isPredictionZero ? '#fbfccb' : 'rgb(255, 141, 141)';
+    
+            // Update result box with the correct message class and background color
+            document.getElementById('resultValue').textContent = `Result: ${data.prediction}`;
+            const resultMessage = document.getElementById('resultMessage');
+            resultMessage.textContent = isPredictionZero ? 'Safe Condition' : 'Dangerous Condition';
+            resultMessage.className = `message ${messageClass}`;
+            resultMessage.style.backgroundColor = backgroundColor;
+        }
+    
+        // Function to periodically update the fixed reading boxes
+        function updateReadings() {
+            // Fetch the last prediction from the server
+            fetch('/last_prediction')
+                .then(response => response.json())
+                .then(data => {
+                    updateReadingBoxes(data);
+                });
+        }
+    
+        // Update the readings every 5 seconds (adjust as needed)
+        setInterval(updateReadings, 5000);
+    </script>
+</body>
+</html>
